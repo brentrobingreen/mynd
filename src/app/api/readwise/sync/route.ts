@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { fetchAllHighlights } from '@/lib/readwise/client'
+import { fetchAllBooks, fetchAllHighlights, isExcludedBook } from '@/lib/readwise/client'
 import { fetchBookCover } from '@/lib/books/google-books'
 
 export async function POST() {
@@ -10,33 +10,52 @@ export async function POST() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
-  const { data: profile } = await db.from('users').select('readwise_token').eq('id', user.id).single()
 
+  const { data: profile } = await db.from('users').select('readwise_token').eq('id', user.id).single()
   if (!profile?.readwise_token) {
     return NextResponse.json({ error: 'Readwise not connected' }, { status: 400 })
   }
 
-  const highlights = await fetchAllHighlights(profile.readwise_token)
+  const token = profile.readwise_token
 
-  // Group by book_id from Readwise
-  const bookMap = new Map<number, { title: string; author: string; cover: string | null; highlights: typeof highlights }>()
-  for (const h of highlights) {
-    if (!bookMap.has(h.book_id)) {
-      bookMap.set(h.book_id, { title: h.book_title, author: h.author, cover: h.cover_image_url, highlights: [] })
+  // Fetch books and highlights from Readwise separately
+  const [rwBooks, rwHighlights] = await Promise.all([
+    fetchAllBooks(token),
+    fetchAllHighlights(token),
+  ])
+
+  // Build book lookup map — skip excluded books (e.g. "How to Use Readwise")
+  const bookMap = new Map<number, typeof rwBooks[0]>()
+  for (const book of rwBooks) {
+    if (!isExcludedBook(book.title, book.author)) {
+      bookMap.set(book.id, book)
     }
-    bookMap.get(h.book_id)!.highlights.push(h)
+  }
+
+  // Group highlights by book_id, skipping excluded books and empty highlights
+  const highlightsByBook = new Map<number, typeof rwHighlights>()
+  for (const h of rwHighlights) {
+    if (!h.text?.trim()) continue
+    if (!bookMap.has(h.book_id)) continue // excluded or unknown book
+    if (!highlightsByBook.has(h.book_id)) highlightsByBook.set(h.book_id, [])
+    highlightsByBook.get(h.book_id)!.push(h)
   }
 
   let booksImported = 0
   let highlightsImported = 0
 
-  for (const [, group] of bookMap) {
+  for (const [rwBookId, highlights] of highlightsByBook) {
+    const rwBook = bookMap.get(rwBookId)!
+    const title = rwBook.title.trim()
+    const author = (rwBook.author ?? 'Unknown').trim()
+
+    // Upsert book — match on title + author + user
     const { data: existing } = await db
       .from('books')
       .select('id')
       .eq('user_id', user.id)
-      .eq('title', group.title)
-      .eq('author', group.author)
+      .eq('title', title)
+      .eq('author', author)
       .limit(1)
 
     let bookId: string
@@ -44,10 +63,16 @@ export async function POST() {
     if (existing && existing.length > 0) {
       bookId = existing[0].id
     } else {
-      const coverUrl = group.cover ?? await fetchBookCover(group.title, group.author)
+      const coverUrl = rwBook.cover_image_url ?? await fetchBookCover(title, author)
       const { data: newBook, error } = await db
         .from('books')
-        .insert({ user_id: user.id, title: group.title, author: group.author, cover_url: coverUrl, source: 'readwise' })
+        .insert({
+          user_id: user.id,
+          title,
+          author,
+          cover_url: coverUrl,
+          source: 'readwise',
+        })
         .select('id')
         .single()
 
@@ -56,22 +81,23 @@ export async function POST() {
       booksImported++
     }
 
+    // Skip highlights that already exist (match on text)
     const { data: existingHighlights } = await db
       .from('highlights')
       .select('text')
       .eq('book_id', bookId)
       .eq('user_id', user.id)
 
-    const existingTexts = new Set(((existingHighlights ?? []) as { text: string }[]).map((h: { text: string }) => h.text))
+    const existingTexts = new Set(((existingHighlights ?? []) as { text: string }[]).map(h => h.text))
 
-    const newHighlights = group.highlights
-      .filter(h => h.text && !existingTexts.has(h.text))
+    const newHighlights = highlights
+      .filter(h => !existingTexts.has(h.text))
       .map(h => ({
         user_id: user.id,
         book_id: bookId,
         text: h.text,
-        note: h.note,
-        date_highlighted: h.highlighted_at,
+        note: h.note ?? null,
+        date_highlighted: h.highlighted_at ?? null,
         source: 'readwise',
       }))
 
