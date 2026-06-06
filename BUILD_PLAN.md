@@ -12,7 +12,7 @@
 | 6 | Build Readwise OAuth integration | ✅ Done | [STEP 6] |
 | 7 | Build highlight ingestion + embedding pipeline | ✅ Done | [STEP 7] |
 | 8 | Build library view (book cards + Google Books covers) | ✅ Done | [STEP 8] |
-| 9 | Build brain chat interface (RAG pipeline, streaming, attribution) | ⬜ Pending | — |
+| 9 | Build brain chat interface (RAG pipeline, streaming, attribution) | ✅ Done | [STEP 9] |
 | 10 | Build Stripe free/premium gate | ⬜ Pending | — |
 | 11 | Deploy to Vercel | ⬜ Pending | — |
 
@@ -21,6 +21,9 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 9 — 2026-06-06
+RAG pipeline complete: retrieveRelevantHighlights (embed question → Pinecone query → filter >0.75 score), personalised Claude system prompt with user's highlights, streaming SSE via ReadableStream. Brain chat UI: starter questions, streaming text with loading state, source book tags (warm yellow), collapsible source passages with book/author attribution. Default brain auto-created on first chat.
 
 ### STEP 8 — 2026-06-06
 Library view: AppNav sidebar (library/brain/journal/settings links + sign out). Book cards with cover image, highlight count, resonance score bar, core-book star. Upload widget (drag-and-drop Kindle file + Readwise sync button). Root redirect / → /library. next.config image domains for Google Books.
