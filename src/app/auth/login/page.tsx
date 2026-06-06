@@ -9,7 +9,7 @@ export default function LoginPage() {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-3 mb-4">
             <BookOpen className="w-8 h-8 text-[var(--accent)]" />
-            <span className="font-literary text-2xl text-[var(--foreground)] tracking-tight">Resontheca</span>
+            <span className="font-literary text-2xl text-[var(--foreground)] tracking-tight">Mynd</span>
           </div>
           <p className="text-[var(--muted)] text-sm">Your books know you. Now they can guide you.</p>
         </div>

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Resontheca — Your books, made conversational',
+  title: 'Mynd — Your books, made conversational',
   description: 'A personal book intelligence platform. Chat with your own highlights and let your reading guide your thinking.',
 }
 

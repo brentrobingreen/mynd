@@ -21,7 +21,7 @@ export default function AppNav() {
       <div className="p-6 border-b border-[var(--border)]">
         <div className="flex items-center gap-2.5">
           <BookOpen className="w-6 h-6 text-[var(--accent)]" />
-          <span className="font-literary text-lg text-[var(--foreground)] tracking-tight">Resontheca</span>
+          <span className="font-literary text-lg text-[var(--foreground)] tracking-tight">Mynd</span>
         </div>
       </div>
 

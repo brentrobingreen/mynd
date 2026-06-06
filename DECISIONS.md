@@ -1,4 +1,4 @@
-# RESONTHECA — Technical Decisions Log
+# MYND — Technical Decisions Log
 
 ## Decision 1 — Framework: Next.js (App Router) + TypeScript
 **Date:** 2026-06-06  

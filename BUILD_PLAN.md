@@ -1,4 +1,4 @@
-# RESONTHECA — Build Plan
+# MYND — Build Plan
 
 ## Phase 1: MVP
 
@@ -29,7 +29,7 @@ Stopped at Step 11 (Vercel deployment). vercel.json created with function timeou
 3. Run `! vercel login` in Claude Code prompt
 4. Claude will deploy to Vercel, run Supabase migrations, create Pinecone index, and configure env vars
 
-GitHub repo: https://github.com/brentrobingreen/resontheca (dev branch)
+GitHub repo: https://github.com/brentrobingreen/mynd (dev branch)
 
 ### STEP 10 — 2026-06-06
 Stripe integration: Stripe client (latest API version), checkout session creation (subscription for monthly, payment for lifetime), webhook handler (checkout.session.completed, subscription.deleted/updated → update subscription_tier in Supabase). Settings page with upgrade cards (Free/Premium/$12.99/Lifetime/$249), Readwise connection status. Free-tier limit enforced in brain chat API (20 queries/month).
