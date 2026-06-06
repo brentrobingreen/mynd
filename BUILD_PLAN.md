@@ -9,7 +9,7 @@
 | 3 | Set up Pinecone index | ✅ Done | [STEP 3] |
 | 4 | Implement Supabase Auth (email + Google OAuth) | ✅ Done | [STEP 4] |
 | 5 | Build Kindle My Clippings.txt parser | ✅ Done | [STEP 5] |
-| 6 | Build Readwise OAuth integration | ⬜ Pending | — |
+| 6 | Build Readwise OAuth integration | ✅ Done | [STEP 6] |
 | 7 | Build highlight ingestion + embedding pipeline | ⬜ Pending | — |
 | 8 | Build library view (book cards + Google Books covers) | ⬜ Pending | — |
 | 9 | Build brain chat interface (RAG pipeline, streaming, attribution) | ⬜ Pending | — |
@@ -21,6 +21,9 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 6 — 2026-06-06
+Readwise integration: token validation, paginated highlight fetch, OAuth redirect flow (GET /api/readwise/connect → Readwise → GET /api/readwise/callback saves token). POST /api/readwise/sync pulls all highlights, groups by book, upserts books + highlights with duplicate prevention. Falls back to Google Books for missing covers.
 
 ### STEP 5 — 2026-06-06
 Kindle My Clippings.txt parser: handles all entry formats (page, location, date), skips bookmarks/notes, groups by book. API route POST /api/highlights/kindle: uploads file, parses, upserts books (with Google Books cover fetch), inserts highlights skipping duplicates. Google Books helper (cover fetching, HTTPS upgrade, 24h cache).
