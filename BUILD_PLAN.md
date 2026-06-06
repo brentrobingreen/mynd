@@ -4,7 +4,7 @@
 
 | # | Step | Status | Commit |
 |---|------|--------|--------|
-| 1 | Initialise Next.js project with TypeScript | ⬜ Pending | — |
+| 1 | Initialise Next.js project with TypeScript | ✅ Done | [STEP 1] |
 | 2 | Set up Supabase project — create all core database tables | ⬜ Pending | — |
 | 3 | Set up Pinecone index | ⬜ Pending | — |
 | 4 | Implement Supabase Auth (email + Google OAuth) | ⬜ Pending | — |
@@ -21,3 +21,6 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 1 — 2026-06-06
+Initialised Next.js 14+ (App Router, TypeScript, Tailwind). Installed all core dependencies: Supabase, Pinecone, Anthropic SDK, OpenAI, Stripe. Created project directory structure (lib, types, components, app routes). Defined all TypeScript types. Set up warm library design tokens in globals.css. Created .env.example with all required variables. Build passes cleanly.

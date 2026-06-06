@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm library palette */
+  --background: #faf7f2;
+  --foreground: #1a1612;
+  --muted: #8a7e72;
+  --muted-bg: #f0ebe3;
+  --border: #e0d8cc;
+  --accent: #c17d2e;
+  --accent-dark: #9b6220;
+  --accent-green: #3a5a40;
+  --highlight: #f5d67a;
+  --card-bg: #fffdf9;
+  --sidebar-bg: #f5f0e8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-bg: var(--muted-bg);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-green: var(--accent-green);
+  --color-highlight: var(--highlight);
+  --color-card: var(--card-bg);
+  --color-sidebar: var(--sidebar-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Serif for literary content */
+.font-literary {
+  font-family: Georgia, 'Times New Roman', serif;
 }
