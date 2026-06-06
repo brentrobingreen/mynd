@@ -8,7 +8,7 @@
 | 2 | Set up Supabase project — create all core database tables | ✅ Done | [STEP 2] |
 | 3 | Set up Pinecone index | ✅ Done | [STEP 3] |
 | 4 | Implement Supabase Auth (email + Google OAuth) | ✅ Done | [STEP 4] |
-| 5 | Build Kindle My Clippings.txt parser | ⬜ Pending | — |
+| 5 | Build Kindle My Clippings.txt parser | ✅ Done | [STEP 5] |
 | 6 | Build Readwise OAuth integration | ⬜ Pending | — |
 | 7 | Build highlight ingestion + embedding pipeline | ⬜ Pending | — |
 | 8 | Build library view (book cards + Google Books covers) | ⬜ Pending | — |
@@ -21,6 +21,9 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 5 — 2026-06-06
+Kindle My Clippings.txt parser: handles all entry formats (page, location, date), skips bookmarks/notes, groups by book. API route POST /api/highlights/kindle: uploads file, parses, upserts books (with Google Books cover fetch), inserts highlights skipping duplicates. Google Books helper (cover fetching, HTTPS upgrade, 24h cache).
 
 ### STEP 4 — 2026-06-06
 Supabase Auth: email/password + Google OAuth. Login page (unified login/signup with Suspense boundary). Auth callback route exchanges code for session. Sign-out route. Middleware redirects unauthenticated users to /auth/login for protected routes (/library, /brain, /journal, /settings).
