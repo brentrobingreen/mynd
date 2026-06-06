@@ -14,21 +14,21 @@ export default async function LibraryPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
 
-  const { data: books } = await db
-    .from('books')
-    .select(`
-      id, title, author, cover_url, source, is_core, resonance_score, tags, date_added,
-      highlights(count)
-    `)
-    .eq('user_id', user.id)
-    .order('resonance_score', { ascending: false })
+  const [booksResult, profileResult] = await Promise.all([
+    db.from('books')
+      .select('id, title, author, cover_url, source, is_core, resonance_score, tags, date_added, highlights(count)')
+      .eq('user_id', user.id)
+      .order('resonance_score', { ascending: false }),
+    db.from('users').select('readwise_token').eq('id', user.id).single(),
+  ])
 
-  const booksWithCount = (books ?? []).map((b: Book & { highlights: [{ count: number }] }) => ({
+  const booksWithCount = (booksResult.data ?? []).map((b: Book & { highlights: [{ count: number }] }) => ({
     ...b,
     highlight_count: b.highlights?.[0]?.count ?? 0,
   }))
 
   const totalHighlights = booksWithCount.reduce((sum: number, b: Book & { highlight_count: number }) => sum + b.highlight_count, 0)
+  const readwiseConnected = !!profileResult.data?.readwise_token
 
   return (
     <div className="p-8">
@@ -55,7 +55,7 @@ export default async function LibraryPage() {
           {booksWithCount.length === 0 ? (
             <div className="text-center py-20 text-[var(--muted)]">
               <p className="font-literary text-xl mb-2">Your library is empty</p>
-              <p className="text-sm">Upload your Kindle clippings or connect Readwise to get started.</p>
+              <p className="text-sm">Connect Readwise or upload your Kindle clippings to get started.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -67,11 +67,9 @@ export default async function LibraryPage() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-sm font-medium text-[var(--foreground)] mb-3">Add books</h2>
-            <UploadWidget />
-          </div>
+        <div>
+          <h2 className="text-sm font-medium text-[var(--foreground)] mb-3">Add highlights</h2>
+          <UploadWidget readwiseConnected={readwiseConnected} />
         </div>
       </div>
     </div>
