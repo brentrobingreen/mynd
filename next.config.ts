@@ -14,6 +14,22 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.media-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'd3t3ozftmdmh3i.cloudfront.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'readwise-assets.s3.amazonaws.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'covers.openlibrary.org',
       },
     ],
