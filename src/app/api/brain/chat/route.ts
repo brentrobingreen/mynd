@@ -23,20 +23,28 @@ export async function POST(request: Request) {
     startOfMonth.setDate(1)
     startOfMonth.setHours(0, 0, 0, 0)
 
-    const { count } = await db
-      .from('messages')
-      .select('id', { count: 'exact', head: true })
-      .eq('role', 'user')
-      .gte('created_at', startOfMonth.toISOString())
-      .in('conversation_id',
-        db.from('conversations').select('id').eq('user_id', user.id)
-      )
+    // Get this user's conversation IDs first, then count messages
+    const { data: convs } = await db
+      .from('conversations')
+      .select('id')
+      .eq('user_id', user.id)
 
-    if ((count ?? 0) >= 20) {
-      return NextResponse.json(
-        { error: 'You have reached your 20 free queries this month. Upgrade to Premium for unlimited access.', upgrade: true },
-        { status: 402 }
-      )
+    const convIds = (convs ?? []).map((c: { id: string }) => c.id)
+
+    if (convIds.length > 0) {
+      const { count } = await db
+        .from('messages')
+        .select('id', { count: 'exact', head: true })
+        .eq('role', 'user')
+        .gte('created_at', startOfMonth.toISOString())
+        .in('conversation_id', convIds)
+
+      if ((count ?? 0) >= 20) {
+        return NextResponse.json(
+          { error: 'You have reached your 20 free queries this month. Upgrade to Premium for unlimited access.', upgrade: true },
+          { status: 402 }
+        )
+      }
     }
   }
 

@@ -85,14 +85,15 @@ export async function queryHighlights(
     ? { book_id: { $in: bookIds } }
     : undefined
 
-  const result = await index.namespace(namespace).query({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result = await (index.namespace(namespace) as any).query({
     vector: questionEmbedding,
     topK,
     filter,
     includeMetadata: true,
   })
 
-  return (result.matches ?? []).map(m => ({
+  return ((result.matches ?? []) as Array<{ id: string; score?: number; metadata?: Record<string, string> }>).map(m => ({
     id: m.id,
     score: m.score ?? 0,
     metadata: (m.metadata ?? {}) as Record<string, string>,
