@@ -1,0 +1,15 @@
+{
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "functions": {
+    "src/app/api/brain/chat/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/highlights/embed/route.ts": {
+      "maxDuration": 300
+    },
+    "src/app/api/readwise/sync/route.ts": {
+      "maxDuration": 120
+    }
+  }
+}

@@ -14,13 +14,22 @@
 | 8 | Build library view (book cards + Google Books covers) | ✅ Done | [STEP 8] |
 | 9 | Build brain chat interface (RAG pipeline, streaming, attribution) | ✅ Done | [STEP 9] |
 | 10 | Build Stripe free/premium gate | ✅ Done | [STEP 10] |
-| 11 | Deploy to Vercel | ⬜ Pending | — |
+| 11 | Deploy to Vercel | 🔶 In Progress | needs API keys |
 
 ---
 
 ## Progress Log
 
 _Updated after each completed step._
+
+### SESSION PAUSE — 2026-06-06
+Stopped at Step 11 (Vercel deployment). vercel.json created with function timeouts. To resume next session:
+1. Collect API keys: Supabase (URL + anon + service_role), Pinecone, Anthropic, OpenAI, Stripe (secret + publishable + webhook + price IDs)
+2. Create `.env.local` in project root with all keys
+3. Run `! vercel login` in Claude Code prompt
+4. Claude will deploy to Vercel, run Supabase migrations, create Pinecone index, and configure env vars
+
+GitHub repo: https://github.com/brentrobingreen/resontheca (dev branch)
 
 ### STEP 10 — 2026-06-06
 Stripe integration: Stripe client (latest API version), checkout session creation (subscription for monthly, payment for lifetime), webhook handler (checkout.session.completed, subscription.deleted/updated → update subscription_tier in Supabase). Settings page with upgrade cards (Free/Premium/$12.99/Lifetime/$249), Readwise connection status. Free-tier limit enforced in brain chat API (20 queries/month).
