@@ -13,7 +13,7 @@
 | 7 | Build highlight ingestion + embedding pipeline | ✅ Done | [STEP 7] |
 | 8 | Build library view (book cards + Google Books covers) | ✅ Done | [STEP 8] |
 | 9 | Build brain chat interface (RAG pipeline, streaming, attribution) | ✅ Done | [STEP 9] |
-| 10 | Build Stripe free/premium gate | ⬜ Pending | — |
+| 10 | Build Stripe free/premium gate | ✅ Done | [STEP 10] |
 | 11 | Deploy to Vercel | ⬜ Pending | — |
 
 ---
@@ -21,6 +21,9 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 10 — 2026-06-06
+Stripe integration: Stripe client (latest API version), checkout session creation (subscription for monthly, payment for lifetime), webhook handler (checkout.session.completed, subscription.deleted/updated → update subscription_tier in Supabase). Settings page with upgrade cards (Free/Premium/$12.99/Lifetime/$249), Readwise connection status. Free-tier limit enforced in brain chat API (20 queries/month).
 
 ### STEP 9 — 2026-06-06
 RAG pipeline complete: retrieveRelevantHighlights (embed question → Pinecone query → filter >0.75 score), personalised Claude system prompt with user's highlights, streaming SSE via ReadableStream. Brain chat UI: starter questions, streaming text with loading state, source book tags (warm yellow), collapsible source passages with book/author attribution. Default brain auto-created on first chat.

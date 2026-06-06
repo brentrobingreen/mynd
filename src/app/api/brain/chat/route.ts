@@ -13,9 +13,32 @@ export async function POST(request: Request) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any
 
-  // Get user name for personalised prompt
-  const { data: profile } = await db.from('users').select('name').eq('id', user.id).single()
+  // Get user profile (name + subscription tier for limit checks)
+  const { data: profile } = await db.from('users').select('name, subscription_tier').eq('id', user.id).single()
   const userName = profile?.name ?? user.email?.split('@')[0] ?? 'Reader'
+
+  // Enforce free-tier query limit (20/month)
+  if (profile?.subscription_tier === 'free') {
+    const startOfMonth = new Date()
+    startOfMonth.setDate(1)
+    startOfMonth.setHours(0, 0, 0, 0)
+
+    const { count } = await db
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('role', 'user')
+      .gte('created_at', startOfMonth.toISOString())
+      .in('conversation_id',
+        db.from('conversations').select('id').eq('user_id', user.id)
+      )
+
+    if ((count ?? 0) >= 20) {
+      return NextResponse.json(
+        { error: 'You have reached your 20 free queries this month. Upgrade to Premium for unlimited access.', upgrade: true },
+        { status: 402 }
+      )
+    }
+  }
 
   // Get brain's book subset (if using a specific brain)
   let bookIds: string[] | undefined
