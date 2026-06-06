@@ -7,7 +7,7 @@
 | 1 | Initialise Next.js project with TypeScript | ✅ Done | [STEP 1] |
 | 2 | Set up Supabase project — create all core database tables | ✅ Done | [STEP 2] |
 | 3 | Set up Pinecone index | ✅ Done | [STEP 3] |
-| 4 | Implement Supabase Auth (email + Google OAuth) | ⬜ Pending | — |
+| 4 | Implement Supabase Auth (email + Google OAuth) | ✅ Done | [STEP 4] |
 | 5 | Build Kindle My Clippings.txt parser | ⬜ Pending | — |
 | 6 | Build Readwise OAuth integration | ⬜ Pending | — |
 | 7 | Build highlight ingestion + embedding pipeline | ⬜ Pending | — |
@@ -21,6 +21,9 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 4 — 2026-06-06
+Supabase Auth: email/password + Google OAuth. Login page (unified login/signup with Suspense boundary). Auth callback route exchanges code for session. Sign-out route. Middleware redirects unauthenticated users to /auth/login for protected routes (/library, /brain, /journal, /settings).
 
 ### STEP 3 — 2026-06-06
 Pinecone client helper (singleton, per-user namespace isolation). One-time index creation script at scripts/setup-pinecone.ts — run `npx tsx scripts/setup-pinecone.ts` after adding .env.local. Serverless index, cosine metric, 1536 dimensions (ada-002).
