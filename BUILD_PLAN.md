@@ -10,7 +10,7 @@
 | 4 | Implement Supabase Auth (email + Google OAuth) | ✅ Done | [STEP 4] |
 | 5 | Build Kindle My Clippings.txt parser | ✅ Done | [STEP 5] |
 | 6 | Build Readwise OAuth integration | ✅ Done | [STEP 6] |
-| 7 | Build highlight ingestion + embedding pipeline | ⬜ Pending | — |
+| 7 | Build highlight ingestion + embedding pipeline | ✅ Done | [STEP 7] |
 | 8 | Build library view (book cards + Google Books covers) | ⬜ Pending | — |
 | 9 | Build brain chat interface (RAG pipeline, streaming, attribution) | ⬜ Pending | — |
 | 10 | Build Stripe free/premium gate | ⬜ Pending | — |
@@ -21,6 +21,9 @@
 ## Progress Log
 
 _Updated after each completed step._
+
+### STEP 7 — 2026-06-06
+RAG ingestion pipeline: OpenAI ada-002 embeddings in batches of 100. Highlight cleaning before embedding. Pinecone upsert in per-user namespaces with full metadata. Semantic query function with optional book_id filter for brain scoping. POST /api/highlights/embed triggers embedding for all un-embedded highlights up to 500 at a time.
 
 ### STEP 6 — 2026-06-06
 Readwise integration: token validation, paginated highlight fetch, OAuth redirect flow (GET /api/readwise/connect → Readwise → GET /api/readwise/callback saves token). POST /api/readwise/sync pulls all highlights, groups by book, upserts books + highlights with duplicate prevention. Falls back to Google Books for missing covers.
