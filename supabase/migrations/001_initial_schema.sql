@@ -1,6 +1,3 @@
--- Enable UUID extension
-create extension if not exists "uuid-ossp";
-
 -- Users (extends Supabase auth.users)
 create table public.users (
   id uuid references auth.users(id) on delete cascade primary key,
@@ -15,7 +12,7 @@ create table public.users (
 
 -- Books
 create table public.books (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   user_id uuid references public.users(id) on delete cascade not null,
   title text not null,
   author text not null,
@@ -32,7 +29,7 @@ create index books_user_id_idx on public.books(user_id);
 
 -- Highlights
 create table public.highlights (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   user_id uuid references public.users(id) on delete cascade not null,
   book_id uuid references public.books(id) on delete cascade not null,
   text text not null,
@@ -49,7 +46,7 @@ create index highlights_book_id_idx on public.highlights(book_id);
 
 -- Brains
 create table public.brains (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   user_id uuid references public.users(id) on delete cascade not null,
   name text not null,
   description text,
@@ -61,7 +58,7 @@ create index brains_user_id_idx on public.brains(user_id);
 
 -- Conversations
 create table public.conversations (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   user_id uuid references public.users(id) on delete cascade not null,
   brain_id uuid references public.brains(id) on delete cascade not null,
   title text,
@@ -73,7 +70,7 @@ create index conversations_brain_id_idx on public.conversations(brain_id);
 
 -- Messages
 create table public.messages (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   conversation_id uuid references public.conversations(id) on delete cascade not null,
   role text not null check (role in ('user', 'assistant')),
   content text not null,
@@ -85,7 +82,7 @@ create index messages_conversation_id_idx on public.messages(conversation_id);
 
 -- Journal entries
 create table public.journal_entries (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   user_id uuid references public.users(id) on delete cascade not null,
   content text not null,
   linked_highlights uuid[] default '{}' not null,
@@ -96,7 +93,7 @@ create index journal_entries_user_id_idx on public.journal_entries(user_id);
 
 -- Daily digests
 create table public.daily_digests (
-  id uuid default uuid_generate_v4() primary key,
+  id uuid default gen_random_uuid() primary key,
   user_id uuid references public.users(id) on delete cascade not null,
   content text not null,
   source_highlights jsonb default '[]' not null,
